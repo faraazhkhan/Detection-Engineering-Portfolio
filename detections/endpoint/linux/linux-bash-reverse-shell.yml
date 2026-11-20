@@ -1,0 +1,25 @@
+title: Linux Bash Reverse Shell via /dev/tcp
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1111
+status: experimental
+description: Detects a shell command that opens a network connection through /dev/tcp, the classic one-line Bash reverse shell that gives an attacker remote command access.
+references:
+- https://attack.mitre.org/techniques/T1059/004/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.execution
+- attack.t1059.004
+logsource:
+  category: process_creation
+  product: linux
+detection:
+  selection_img:
+    Image|endswith:
+    - /bash
+    - /sh
+  selection_cli:
+    CommandLine|contains: /dev/tcp/
+  condition: selection_img and selection_cli
+falsepositives:
+- Rare. Admin or monitoring scripts that use /dev/tcp to test whether a port is open.
+level: high

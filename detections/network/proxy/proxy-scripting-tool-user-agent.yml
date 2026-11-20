@@ -1,0 +1,26 @@
+title: Web Proxy Request from a Command-Line Scripting Tool
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1113
+status: experimental
+description: Detects web requests whose user agent identifies a command-line tool (curl, wget, python-requests or PowerShell), which is how many scripts and malware talk to the internet but rarely how a normal user browses.
+references:
+- https://attack.mitre.org/techniques/T1071/001/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.command-and-control
+- attack.t1071.001
+logsource:
+  category: proxy
+detection:
+  selection_tools:
+    c-useragent|startswith:
+    - curl/
+    - Wget/
+    - python-requests/
+  selection_ps:
+    c-useragent|contains: WindowsPowerShell
+  condition: 1 of selection_*
+falsepositives:
+- Build servers, developer machines, monitoring tools, and legitimate scripts that call web services.
+- Software update and package-manager tools.
+level: low

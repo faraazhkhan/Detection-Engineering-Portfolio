@@ -1,0 +1,25 @@
+title: Web Proxy Request to a Tunneling Service
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1112
+status: experimental
+description: Detects web requests to well-known tunneling services (such as ngrok and Cloudflare quick tunnels) that attackers use to relay traffic, expose internal services, or move data out.
+references:
+- https://attack.mitre.org/techniques/T1572/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.command-and-control
+- attack.t1572
+logsource:
+  category: proxy
+detection:
+  selection:
+    cs-host|endswith:
+    - .ngrok.io
+    - .ngrok-free.app
+    - .ngrok.app
+    - .trycloudflare.com
+    - .serveo.net
+  condition: selection
+falsepositives:
+- Developers and IT staff who use tunnels to test or demo applications.
+level: medium

@@ -1,0 +1,31 @@
+title: Firewall Allowed Inbound RDP, SSH, SMB or Telnet from the Internet
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1114
+status: experimental
+description: Detects firewall logs showing remote administration or file-sharing ports (RDP, SSH, SMB, Telnet) allowed from a public IP address to an internal host, an exposure that attackers actively scan for.
+references:
+- https://attack.mitre.org/techniques/T1133/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.initial-access
+- attack.t1133
+logsource:
+  category: firewall
+detection:
+  selection:
+    action: allow
+    dst_port:
+    - 3389
+    - 22
+    - 445
+    - 23
+  filter_internal:
+    src_ip|cidr:
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+  condition: selection and not filter_internal
+falsepositives:
+- Intentionally published services, such as a bastion host or a VPN gateway that listens on SSH.
+- Approved vendor or partner access.
+level: high

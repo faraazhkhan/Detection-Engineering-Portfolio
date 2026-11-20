@@ -1,0 +1,26 @@
+title: Certutil Used to Download a File from a URL
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1109
+status: experimental
+description: Detects certutil.exe being used to fetch a file from a web address, a living-off-the-land way to download payloads using a trusted Windows tool.
+references:
+- https://attack.mitre.org/techniques/T1105/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.command-and-control
+- attack.t1105
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+  - Image|endswith: \certutil.exe
+  - OriginalFileName: CertUtil.exe
+  selection_cli:
+    CommandLine|contains|all:
+    - urlcache
+    - http
+  condition: selection_img and selection_cli
+falsepositives:
+- Rare. Administrators testing certificate revocation URLs or fetching a certificate or CRL.
+level: medium
