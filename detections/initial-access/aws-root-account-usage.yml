@@ -1,0 +1,27 @@
+title: AWS Root Account Activity
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1104
+status: experimental
+description: Detects any API call or console action made with the AWS root account, which should almost never be used in day-to-day operations.
+references:
+- https://attack.mitre.org/techniques/T1078/004/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.initial-access
+- attack.persistence
+- attack.privilege-escalation
+- attack.defense-evasion
+- attack.t1078.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    userIdentity.type: Root
+  filter_service:
+    eventType: AwsServiceEvent
+  condition: selection and not filter_service
+falsepositives:
+- Rare, planned tasks that only the root user can perform, such as changing account settings or closing the account.
+- Initial account setup.
+level: high

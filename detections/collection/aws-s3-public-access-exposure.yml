@@ -1,0 +1,27 @@
+title: AWS S3 Public Access Block Removed or Bucket ACL Opened to Everyone
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1106
+status: experimental
+description: 'Detects changes that can expose an S3 bucket to the internet: deleting the public access block, or setting a bucket ACL that grants access to all users.'
+references:
+- https://attack.mitre.org/techniques/T1530/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.collection
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection_block:
+    eventSource: s3.amazonaws.com
+    eventName: DeleteBucketPublicAccessBlock
+  selection_acl:
+    eventSource: s3.amazonaws.com
+    eventName: PutBucketAcl
+    requestParameters|contains: AllUsers
+  condition: 1 of selection_*
+falsepositives:
+- Buckets that intentionally host public content, such as a static website.
+- Planned configuration changes by the platform team.
+level: high

@@ -15,6 +15,13 @@ I'm a security engineer with 5+ years in detection engineering, threat hunting, 
 | [Windows Event Log Cleared via wevtutil or PowerShell](detections/defense-evasion/windows-event-log-cleared.yml) | T1070.001 | Defense Evasion | Windows | High | Draft |
 | [AWS CloudTrail Logging Stopped or Modified](detections/defense-evasion/aws-cloudtrail-logging-disabled.yml) | T1562.008 | Defense Evasion | AWS | High | Draft |
 | [PsExec Service Installed on Host](detections/lateral-movement/psexec-service-installed.yml) | T1021.002, T1569.002 | Lateral Movement | Windows | Medium | Draft |
+| [Volume Shadow Copies Deleted via vssadmin or wmic](detections/impact/shadow-copy-deletion.yml) | T1490 | Impact | Windows | High | Draft |
+| [Microsoft Defender Real-Time Protection Disabled or Exclusions Added via PowerShell](detections/defense-evasion/defender-tampering.yml) | T1562.001 | Defense Evasion | Windows | High | Draft |
+| [Local User Created or Added to Administrators Group via net.exe](detections/persistence/new-local-admin-account.yml) | T1136.001, T1098 | Persistence | Windows | Medium | Draft |
+| [AWS Root Account Activity](detections/initial-access/aws-root-account-usage.yml) | T1078.004 | Initial Access / Persistence | AWS | High | Draft |
+| [AWS AdministratorAccess Policy Attached to User, Role or Group](detections/privilege-escalation/aws-iam-administrator-policy-attached.yml) | T1098.003 | Privilege Escalation | AWS | High | Draft |
+| [AWS S3 Public Access Block Removed or Bucket ACL Opened to Everyone](detections/collection/aws-s3-public-access-exposure.yml) | T1530 (approximate) | Collection | AWS | High | Draft |
+| [Microsoft 365 Inbox Rule or Mailbox Forwarding to External Address](detections/collection/m365-inbox-forwarding-rule.yml) | T1114.003 | Collection | Microsoft 365 | High | Draft |
 
 **Status key:** *Draft* means written and syntax-checked but not yet validated in a lab. *Validated* means tested against a simulated technique, with the result recorded in the rule's write-up.
 

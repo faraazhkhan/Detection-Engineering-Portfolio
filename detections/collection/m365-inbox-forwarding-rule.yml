@@ -1,0 +1,33 @@
+title: Microsoft 365 Inbox Rule or Mailbox Forwarding to External Address
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1107
+status: experimental
+description: Detects creation of inbox rules or mailbox settings that forward or redirect mail, a common technique in business email compromise to monitor victims and hide replies.
+references:
+- https://attack.mitre.org/techniques/T1114/003/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.collection
+- attack.t1114.003
+logsource:
+  product: m365
+  service: audit
+detection:
+  selection_rule:
+    Operation:
+    - New-InboxRule
+    - Set-InboxRule
+    Parameters|contains:
+    - ForwardTo
+    - RedirectTo
+    - ForwardAsAttachmentTo
+  selection_mailbox:
+    Operation: Set-Mailbox
+    Parameters|contains:
+    - ForwardingSmtpAddress
+    - ForwardingAddress
+  condition: 1 of selection_*
+falsepositives:
+- Users who forward work mail to a personal address or delegate (also a data-loss risk).
+- Shared mailbox and assistant workflows.
+level: high

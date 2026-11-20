@@ -1,0 +1,28 @@
+title: AWS AdministratorAccess Policy Attached to User, Role or Group
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1105
+status: experimental
+description: Detects the AWS-managed AdministratorAccess policy being attached to an IAM user, role or group, a direct path to full control of an AWS account.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.privilege-escalation
+- attack.persistence
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventSource: iam.amazonaws.com
+    eventName:
+    - AttachUserPolicy
+    - AttachRolePolicy
+    - AttachGroupPolicy
+    requestParameters.policyArn: arn:aws:iam::aws:policy/AdministratorAccess
+  condition: selection
+falsepositives:
+- Planned onboarding of new administrators through an approved process.
+- Infrastructure-as-code pipelines that create admin roles.
+level: high

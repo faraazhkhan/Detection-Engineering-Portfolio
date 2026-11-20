@@ -1,0 +1,28 @@
+title: Microsoft Defender Real-Time Protection Disabled or Exclusions Added via PowerShell
+id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1102
+status: experimental
+description: Detects PowerShell commands that turn off Microsoft Defender real-time monitoring or add scan exclusions, a common step before running malware.
+references:
+- https://attack.mitre.org/techniques/T1562/001/
+author: Faraaz Khan
+date: '2026-11-20'
+tags:
+- attack.defense-evasion
+- attack.t1562.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_disable:
+    CommandLine|contains|all:
+    - Set-MpPreference
+    - DisableRealtimeMonitoring
+  selection_exclusion:
+    CommandLine|contains|all:
+    - Add-MpPreference
+    - Exclusion
+  condition: 1 of selection_*
+falsepositives:
+- IT or security teams adding exclusions for approved software.
+- Software installers that add their own Defender exclusions.
+level: high
