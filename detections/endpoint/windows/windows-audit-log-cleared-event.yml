@@ -1,0 +1,26 @@
+title: Windows Event Log Cleared (Security EID 1102 or System EID 104)
+id: 201c17f4-5e00-4a6b-9966-35c2269234cc
+status: experimental
+description: Detects the Windows events that are written when an event log is cleared, regardless of which tool or method cleared it. Confirms that logs were actually wiped, a common anti-forensics step.
+references:
+  - https://attack.mitre.org/techniques/T1070/001/
+author: Faraaz Khan
+date: 2026-11-21
+tags:
+  - attack.defense-evasion
+  - attack.t1070.001
+logsource:
+  product: windows
+detection:
+  selection_security:
+    Channel: 'Security'
+    EventID: 1102
+  selection_system:
+    Channel: 'System'
+    Provider_Name: 'Microsoft-Windows-Eventlog'
+    EventID: 104
+  condition: 1 of selection_*
+falsepositives:
+  - Administrators clearing logs during maintenance or after imaging a machine.
+  - Build, lab, or test systems that reset logs automatically.
+level: high

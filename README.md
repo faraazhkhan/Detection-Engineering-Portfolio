@@ -13,6 +13,7 @@ I'm a security engineer with 5+ years in detection engineering, threat hunting, 
 | [Scheduled Task Created with User-Writable Path or Script Host](detections/endpoint/windows/schtasks-create-suspicious-action.yml) | T1053.005 | Persistence | Windows | Medium | Draft |
 | [macOS launchctl Loading a Job from a Temporary or Shared Path](detections/endpoint/macos/macos-launchctl-load-from-temp.yml) | T1543.001, T1543.004 | Persistence | macOS | Medium | Draft |
 | [Windows Event Log Cleared via wevtutil or PowerShell](detections/endpoint/windows/windows-event-log-cleared.yml) | T1070.001 | Defense Evasion | Windows | High | Draft |
+| [Windows Event Log Cleared (Security EID 1102 or System EID 104)](detections/endpoint/windows/windows-audit-log-cleared-event.yml) | T1070.001 | Defense Evasion | Windows | High | Draft |
 | [AWS CloudTrail Logging Stopped or Modified](detections/cloud/aws/aws-cloudtrail-logging-disabled.yml) | T1562.008 | Defense Evasion | AWS | High | Draft |
 | [PsExec Service Installed on Host](detections/endpoint/windows/psexec-service-installed.yml) | T1021.002, T1569.002 | Lateral Movement | Windows | Medium | Draft |
 | [Volume Shadow Copies Deleted via vssadmin or wmic](detections/endpoint/windows/shadow-copy-deletion.yml) | T1490 | Impact | Windows | High | Draft |

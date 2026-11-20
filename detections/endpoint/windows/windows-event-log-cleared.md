@@ -35,7 +35,7 @@ Once validated, record the date, the tool used, and a sample of the matching eve
 Exclude known maintenance accounts or hosts, but keep alerting on clears of Security and Sysmon logs. Pair with Security EID 1102 and System EID 104 as a second signal.
 
 ## Limitations
-Process-based only. It sees the command that tries to clear logs, not proof that logs were cleared. Clearing through direct API calls from a compiled tool, or any method that never puts these strings on a command line, will not match. The reliable backstop is the log-cleared events themselves: Security EID 1102 (the Security log was cleared) and System EID 104 (another log was cleared). Treat the pairing as two signals: the process rule gives early warning and the context (who, from where), and 1102/104 confirm the wipe actually happened. A companion rule on EID 1102 and 104 is a strong addition because it fires regardless of the tool used.
+Process-based only. It sees the command that tries to clear logs, not proof that logs were cleared. Clearing through direct API calls from a compiled tool, or any method that never puts these strings on a command line, will not match. The reliable backstop is the log-cleared events themselves: Security EID 1102 (the Security log was cleared) and System EID 104 (another log was cleared). Treat the pairing as two signals: the process rule gives early warning and the context (who, from where), and 1102/104 confirm the wipe actually happened. The companion rule [`windows-audit-log-cleared-event`](./windows-audit-log-cleared-event.md) alerts on EID 1102 and 104 directly and fires regardless of the tool used.
 
 ## Validation results
 _Not yet run._
