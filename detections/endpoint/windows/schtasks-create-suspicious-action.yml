@@ -6,6 +6,7 @@ references:
   - https://attack.mitre.org/techniques/T1053/005/
 author: Faraaz Khan
 date: 2026-11-02
+modified: 2026-11-21
 tags:
   - attack.persistence
   - attack.privilege-escalation
@@ -15,24 +16,36 @@ logsource:
   category: process_creation
   product: windows
 detection:
+  selection_img:
+    - Image|endswith: '\schtasks.exe'
+    - OriginalFileName: 'schtasks.exe'
   selection_create:
-    Image|endswith: '\schtasks.exe'
-    CommandLine|contains: ' /create '
+    CommandLine|contains:
+      - '/create'
+      - '-create'
   selection_path:
     CommandLine|contains:
       - '\AppData\'
       - '\Temp\'
       - '\Users\Public\'
+      - '\ProgramData\'
+      - '\Downloads\'
+      - '%TEMP%'
+      - '%APPDATA%'
+      - '%PUBLIC%'
   selection_lolbin:
     CommandLine|contains:
       - 'powershell'
+      - 'pwsh'
       - 'mshta'
       - 'wscript'
       - 'cscript'
       - 'regsvr32'
       - 'rundll32'
-  condition: selection_create and (selection_path or selection_lolbin)
+      - 'certutil'
+      - 'bitsadmin'
+  condition: selection_img and selection_create and (selection_path or selection_lolbin)
 falsepositives:
-  - Software installers and updaters that register tasks from AppData.
+  - Software installers and updaters that register tasks from AppData or ProgramData.
   - Admin scripts that schedule PowerShell jobs.
 level: medium
