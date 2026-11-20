@@ -42,6 +42,7 @@ Treat a hit as possible ransomware in progress until shown otherwise, because de
 
 ## Limitations
 - `diskshadow` is often run from a script file (`diskshadow /s script.txt`), so the words "delete shadows" are inside the script and not on the command line. That case needs file content or script visibility.
+- Obfuscated PowerShell (encoded commands with `-enc`, string concatenation, or backticks inside `Win32_ShadowCopy` or `Remove-CimInstance`) won't show the plain keywords on the process command line. PowerShell Script Block Logging (Event ID 4104) records the deobfuscated script, so a companion rule on 4104 closes that gap.
 - Direct API calls from a compiled tool, or shadow copy storage being resized so old copies are discarded (for example through `vssadmin resize shadowstorage`), won't match these command lines.
 - Not detecting is not the same as not happening. Pair this with backup-job failure alerts and monitoring of VSS service and storage events.
 
