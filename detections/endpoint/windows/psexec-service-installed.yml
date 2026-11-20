@@ -7,6 +7,7 @@ references:
   - https://attack.mitre.org/techniques/T1569/002/
 author: Faraaz Khan
 date: 2026-11-02
+modified: 2026-11-21
 tags:
   - attack.lateral-movement
   - attack.execution
@@ -16,11 +17,12 @@ logsource:
   product: windows
   service: system
 detection:
-  selection:
-    Provider_Name: 'Service Control Manager'
+  selection_event:
     EventID: 7045
-    ImagePath|contains: 'PSEXESVC'
-  condition: selection
+  selection_psexec:
+    - ServiceName: 'PSEXESVC'
+    - ImagePath|contains: 'PSEXESVC'
+  condition: selection_event and selection_psexec
 falsepositives:
   - Administrators and IT teams that use PsExec for remote management.
 level: medium
