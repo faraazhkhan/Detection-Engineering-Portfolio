@@ -1,0 +1,26 @@
+title: PsExec Service Installed on Host
+id: f5ee869a-e65d-4d06-8302-0d3c63bc7fce
+status: experimental
+description: Detects installation of the PSEXESVC service, which appears on a remote host when PsExec is used to execute commands, often during lateral movement.
+references:
+  - https://attack.mitre.org/techniques/T1021/002/
+  - https://attack.mitre.org/techniques/T1569/002/
+author: Faraaz Khan
+date: 2026-11-02
+tags:
+  - attack.lateral-movement
+  - attack.execution
+  - attack.t1021.002
+  - attack.t1569.002
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    Provider_Name: 'Service Control Manager'
+    EventID: 7045
+    ImagePath|contains: 'PSEXESVC'
+  condition: selection
+falsepositives:
+  - Administrators and IT teams that use PsExec for remote management.
+level: medium

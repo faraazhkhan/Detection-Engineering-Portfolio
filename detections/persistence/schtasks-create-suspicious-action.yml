@@ -1,0 +1,38 @@
+title: Scheduled Task Created with User-Writable Path or Script Host
+id: fc24a135-aea4-4a12-aa6d-63a5a7cabe35
+status: experimental
+description: Detects schtasks.exe creating a task that runs from a user-writable directory or launches a script host or LOLBin, a common persistence method.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+author: Faraaz Khan
+date: 2026-11-02
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.execution
+  - attack.t1053.005
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_create:
+    Image|endswith: '\schtasks.exe'
+    CommandLine|contains: ' /create '
+  selection_path:
+    CommandLine|contains:
+      - '\AppData\'
+      - '\Temp\'
+      - '\Users\Public\'
+  selection_lolbin:
+    CommandLine|contains:
+      - 'powershell'
+      - 'mshta'
+      - 'wscript'
+      - 'cscript'
+      - 'regsvr32'
+      - 'rundll32'
+  condition: selection_create and (selection_path or selection_lolbin)
+falsepositives:
+  - Software installers and updaters that register tasks from AppData.
+  - Admin scripts that schedule PowerShell jobs.
+level: medium

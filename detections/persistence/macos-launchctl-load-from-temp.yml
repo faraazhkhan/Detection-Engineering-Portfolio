@@ -1,0 +1,34 @@
+title: macOS launchctl Loading a Job from a Temporary or Shared Path
+id: bbee3205-6e9a-435b-b844-14072ac013d3
+status: experimental
+description: Detects launchctl loading or bootstrapping a launchd job whose plist sits in a temporary or world-writable location, which is unusual for legitimate software and common in macOS persistence.
+references:
+  - https://attack.mitre.org/techniques/T1543/001/
+  - https://attack.mitre.org/techniques/T1543/004/
+author: Faraaz Khan
+date: 2026-11-02
+tags:
+  - attack.persistence
+  - attack.t1543.001
+  - attack.t1543.004
+logsource:
+  category: process_creation
+  product: macos
+detection:
+  selection_img:
+    Image|endswith: '/launchctl'
+  selection_action:
+    CommandLine|contains:
+      - ' load '
+      - ' bootstrap '
+  selection_path:
+    CommandLine|contains:
+      - '/tmp/'
+      - '/private/tmp/'
+      - '/var/tmp/'
+      - '/Users/Shared/'
+  condition: selection_img and selection_action and selection_path
+falsepositives:
+  - Installers that stage a plist in /tmp before moving it.
+  - Developer or IT tooling that loads test launchd jobs.
+level: medium

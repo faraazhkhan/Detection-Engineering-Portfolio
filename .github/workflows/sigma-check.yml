@@ -1,0 +1,18 @@
+name: Validate Sigma rules
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sigma-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install sigma-cli
+        run: pip install sigma-cli
+      - name: Check rules
+        run: sigma check detections/
