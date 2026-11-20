@@ -6,6 +6,7 @@ references:
   - https://attack.mitre.org/techniques/T1562/008/
 author: Faraaz Khan
 date: 2026-11-02
+modified: 2026-11-21
 tags:
   - attack.defense-evasion
   - attack.t1562.008
@@ -20,8 +21,9 @@ detection:
       - 'DeleteTrail'
       - 'UpdateTrail'
       - 'PutEventSelectors'
+      - 'PutAdvancedEventSelectors'
   condition: selection
 falsepositives:
-  - Planned trail changes made by infrastructure-as-code pipelines or platform engineers.
+  - Planned trail changes made by infrastructure-as-code pipelines or platform engineers (UpdateTrail and the event selector calls are the noisiest).
   - Account setup and migration work.
 level: high
