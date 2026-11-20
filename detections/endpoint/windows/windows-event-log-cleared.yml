@@ -1,11 +1,12 @@
 title: Windows Event Log Cleared via wevtutil or PowerShell
 id: 50010e82-7e4d-4414-8ddc-8aa92f8cb918
 status: experimental
-description: Detects attempts to clear Windows event logs using wevtutil or the Clear-EventLog cmdlet, a common anti-forensics step.
+description: Detects attempts to clear Windows event logs using wevtutil, the Clear-EventLog cmdlet, or the .NET ClearLog method from PowerShell, a common anti-forensics step.
 references:
   - https://attack.mitre.org/techniques/T1070/001/
 author: Faraaz Khan
 date: 2026-11-02
+modified: 2026-11-21
 tags:
   - attack.defense-evasion
   - attack.t1070.001
@@ -13,14 +14,26 @@ logsource:
   category: process_creation
   product: windows
 detection:
-  selection_wevtutil:
-    Image|endswith: '\wevtutil.exe'
+  selection_wevtutil_img:
+    - Image|endswith: '\wevtutil.exe'
+    - OriginalFileName: 'wevtutil.exe'
+  selection_wevtutil_verb:
     CommandLine|contains:
-      - ' cl '
-      - ' clear-log '
-  selection_powershell:
-    CommandLine|contains: 'Clear-EventLog'
-  condition: 1 of selection_*
+      - ' cl'
+      - ' /cl'
+      - ' -cl'
+  selection_ps_img:
+    - Image|endswith:
+        - '\powershell.exe'
+        - '\pwsh.exe'
+    - OriginalFileName:
+        - 'PowerShell.EXE'
+        - 'pwsh.dll'
+  selection_ps_cmd:
+    CommandLine|contains:
+      - 'Clear-EventLog'
+      - 'ClearLog('
+  condition: (selection_wevtutil_img and selection_wevtutil_verb) or (selection_ps_img and selection_ps_cmd)
 falsepositives:
   - System administrators clearing logs during maintenance or after imaging.
   - Build or lab environments that reset logs automatically.
