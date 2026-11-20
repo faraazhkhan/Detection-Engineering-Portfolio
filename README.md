@@ -2,7 +2,7 @@
 
 Detection rules for threat hunting and incident response, written in [Sigma](https://github.com/SigmaHQ/sigma) and mapped to MITRE ATT&CK. Each rule comes with a write-up covering the logic, a test plan, expected false positives, and known blind spots.
 
-I'm a security engineer with 5+ years in detection engineering, threat hunting, and threat intelligence (Securonix, Splunk). This repo is where I keep detections I can share publicly.
+I'm a security engineer with 5+ years of experience in detection engineering, threat hunting, and incident investigation. This repo is where I keep detections I can share publicly.
 
 ## Rules
 
