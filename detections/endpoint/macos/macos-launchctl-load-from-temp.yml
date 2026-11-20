@@ -7,6 +7,7 @@ references:
   - https://attack.mitre.org/techniques/T1543/004/
 author: Faraaz Khan
 date: 2026-11-02
+modified: 2026-11-21
 tags:
   - attack.persistence
   - attack.t1543.001
@@ -19,16 +20,19 @@ detection:
     Image|endswith: '/launchctl'
   selection_action:
     CommandLine|contains:
-      - ' load '
-      - ' bootstrap '
+      - ' load'
+      - ' bootstrap'
   selection_path:
     CommandLine|contains:
       - '/tmp/'
       - '/private/tmp/'
       - '/var/tmp/'
+      - '/private/var/tmp/'
+      - '/var/folders/'
       - '/Users/Shared/'
+      - '/Downloads/'
   condition: selection_img and selection_action and selection_path
 falsepositives:
-  - Installers that stage a plist in /tmp before moving it.
+  - Installers that stage a plist in /tmp or /var/folders before moving it.
   - Developer or IT tooling that loads test launchd jobs.
 level: medium
