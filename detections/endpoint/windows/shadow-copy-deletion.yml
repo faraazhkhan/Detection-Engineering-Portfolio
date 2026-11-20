@@ -1,11 +1,12 @@
-title: Volume Shadow Copies Deleted via vssadmin or wmic
+title: Shadow Copies or Backup Catalog Deleted via vssadmin, wmic, diskshadow, wbadmin or PowerShell
 id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1101
 status: experimental
-description: Detects commands that delete Windows volume shadow copies, which ransomware operators run to stop victims from restoring files from backups.
+description: Detects commands that delete Windows volume shadow copies or the backup catalog, which ransomware operators run to stop victims from restoring files from backups.
 references:
 - https://attack.mitre.org/techniques/T1490/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.impact
 - attack.t1490
@@ -13,17 +14,51 @@ logsource:
   category: process_creation
   product: windows
 detection:
-  selection_vssadmin:
-    Image|endswith: \vssadmin.exe
+  img_vssadmin:
+  - Image|endswith: \vssadmin.exe
+  - OriginalFileName: VSSADMIN.EXE
+  img_diskshadow:
+  - Image|endswith: \diskshadow.exe
+  - OriginalFileName: diskshadow.exe
+  img_wmic:
+  - Image|endswith: \wmic.exe
+  - OriginalFileName: wmic.exe
+  img_wbadmin:
+  - Image|endswith: \wbadmin.exe
+  - OriginalFileName: WBADMIN.EXE
+  img_powershell:
+  - Image|endswith:
+    - \powershell.exe
+    - \pwsh.exe
+  - OriginalFileName:
+    - PowerShell.EXE
+    - pwsh.dll
+  args_delete_shadows:
     CommandLine|contains|all:
     - delete
     - shadows
-  selection_wmic:
-    Image|endswith: \wmic.exe
+  args_wmic:
     CommandLine|contains|all:
     - shadowcopy
     - delete
-  condition: 1 of selection_*
+  args_wbadmin:
+    CommandLine|contains|all:
+    - delete
+    CommandLine|contains:
+    - catalog
+    - systemstatebackup
+    - backup
+  args_powershell:
+    CommandLine|contains|all:
+    - Win32_ShadowCopy
+    CommandLine|contains:
+    - Delete
+    - Remove-CimInstance
+    - Remove-WmiObject
+  condition: ((img_vssadmin or img_diskshadow) and args_delete_shadows)
+    or (img_wmic and args_wmic)
+    or (img_wbadmin and args_wbadmin)
+    or (img_powershell and args_powershell)
 falsepositives:
 - Backup or disk-cleanup software that removes old shadow copies.
 - Administrators freeing disk space on a server.
