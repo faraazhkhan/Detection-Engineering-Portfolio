@@ -1,12 +1,13 @@
 title: Office Application Spawning Encoded PowerShell
 id: ed949df2-50c2-4dd5-ba40-da628587769d
 status: experimental
-description: Detects a Microsoft Office application launching PowerShell with an encoded command, a common pattern after a malicious document is opened.
+description: Detects a Microsoft Office application launching PowerShell with an encoded command, including abbreviated flags such as -e, -en and -ec and the slash forms, a common pattern after a malicious document is opened.
 references:
   - https://attack.mitre.org/techniques/T1059/001/
   - https://attack.mitre.org/techniques/T1204/002/
 author: Faraaz Khan
 date: 2026-11-02
+modified: 2026-11-21
 tags:
   - attack.execution
   - attack.t1059.001
@@ -21,6 +22,10 @@ detection:
       - '\excel.exe'
       - '\powerpnt.exe'
       - '\outlook.exe'
+      - '\msaccess.exe'
+      - '\mspub.exe'
+      - '\visio.exe'
+      - '\onenote.exe'
   selection_child:
     - Image|endswith:
         - '\powershell.exe'
@@ -30,9 +35,12 @@ detection:
         - 'pwsh.dll'
   selection_encoded:
     CommandLine|contains:
-      - ' -enc'
-      - ' -EncodedCommand'
+      - ' -e '
+      - ' /e '
+      - ' -en'
+      - ' /en'
       - ' -ec '
+      - ' /ec '
   condition: selection_parent and selection_child and selection_encoded
 falsepositives:
   - Legacy macros or add-ins in some enterprise workflows that call encoded PowerShell.
