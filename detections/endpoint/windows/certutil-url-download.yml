@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1105/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.command-and-control
 - attack.t1105
@@ -16,11 +17,19 @@ detection:
   selection_img:
   - Image|endswith: \certutil.exe
   - OriginalFileName: CertUtil.exe
-  selection_cli:
+  selection_urlcache:
     CommandLine|contains|all:
     - urlcache
     - http
-  condition: selection_img and selection_cli
+  selection_verifyctl:
+    CommandLine|contains|all:
+    - verifyctl
+    - http
+  selection_ftp:
+    CommandLine|contains|all:
+    - urlcache
+    - ftp://
+  condition: selection_img and (selection_urlcache or selection_verifyctl or selection_ftp)
 falsepositives:
 - Rare. Administrators testing certificate revocation URLs or fetching a certificate or CRL.
 level: medium

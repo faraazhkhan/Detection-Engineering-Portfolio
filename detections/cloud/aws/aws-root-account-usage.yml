@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1078/004/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.initial-access
 - attack.persistence

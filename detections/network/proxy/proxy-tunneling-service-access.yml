@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1572/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.command-and-control
 - attack.t1572
@@ -19,6 +20,10 @@ detection:
     - .ngrok.app
     - .trycloudflare.com
     - .serveo.net
+    - .loca.lt
+    - .localtunnel.me
+    - .lhr.life
+    - .pagekite.me
   condition: selection
 falsepositives:
 - Developers and IT staff who use tunnels to test or demo applications.

@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1114/003/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.collection
 - attack.t1114.003

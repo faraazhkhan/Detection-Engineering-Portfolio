@@ -14,7 +14,7 @@
 Detects web requests whose user agent identifies a command-line tool (curl, wget, python-requests or PowerShell), which is how many scripts and malware talk to the internet but rarely how a normal user browses.
 
 ## Detection logic
-The request user agent starts with curl/, Wget/ or python-requests/, or contains WindowsPowerShell.
+The request user agent starts with `curl/`, `Wget/`, `python-requests/` or `python-urllib/`, or contains `PowerShell/`. Windows PowerShell 5.1 sends a user agent containing `WindowsPowerShell/5.1`, and PowerShell 7 sends one containing `PowerShell/7.x`. Matching `PowerShell/` catches both.
 
 ## How to test
 From a test machine behind your proxy, run `curl http://example.com` and a PowerShell `Invoke-WebRequest`, then check the proxy log for the user agent strings.
@@ -29,6 +29,9 @@ This rule is noisy by design and works best as a hunting lead or for ordinary us
 
 ## Limitations
 Attackers can set any user agent they like, so a miss proves nothing. Treat this as a low-severity lead to combine with other signals, not as a standalone alert.
+
+- Common clients that are also used legitimately, such as Go's `Go-http-client`, are left out because they would swamp a low-severity rule.
+- If HTTPS passes through the proxy without inspection, the user agent may not be visible at all. Endpoint process creation, rare destinations and request timing are better partners for this lead.
 
 ## Validation results
 _Not yet run._

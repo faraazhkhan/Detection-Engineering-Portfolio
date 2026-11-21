@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1098/003/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.privilege-escalation
 - attack.persistence
@@ -20,7 +21,7 @@ detection:
     - AttachUserPolicy
     - AttachRolePolicy
     - AttachGroupPolicy
-    requestParameters.policyArn: arn:aws:iam::aws:policy/AdministratorAccess
+    requestParameters.policyArn|endswith: ':iam::aws:policy/AdministratorAccess'
   condition: selection
 falsepositives:
 - Planned onboarding of new administrators through an approved process.

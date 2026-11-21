@@ -14,7 +14,11 @@
 Detects PowerShell command lines that download content from the web and run it directly, a very common way attackers fetch and execute payloads without saving a file first.
 
 ## Detection logic
-PowerShell runs a command line that both downloads (DownloadString, Net.WebClient, Invoke-WebRequest, Invoke-RestMethod) and executes (IEX or Invoke-Expression) in the same command.
+A PowerShell process (`powershell.exe` or `pwsh.exe`, matched by file name or `OriginalFileName`) whose command line contains both a download and an execution in the same command:
+- Download: `DownloadString`, `DownloadData`, `DownloadFile`, `Net.WebClient`, `Invoke-WebRequest`, `Invoke-RestMethod` or `Start-BitsTransfer`.
+- Execute: `IEX`, `Invoke-Expression`, or `[scriptblock]::Create`, which turns downloaded text into code.
+
+Requiring both parts is what keeps this rule from matching every script that simply downloads a file.
 
 ## How to test
 In an isolated Windows VM, run `powershell -c "IEX (New-Object Net.WebClient).DownloadString('http://127.0.0.1/test.ps1')"` against a local test file. Atomic Red Team has tests for T1059.001 that cover download cradles.
@@ -29,8 +33,12 @@ Allow-list known install commands and the accounts or hosts that run them. Raise
 ## Limitations
 Attackers can split the download and the execution across several commands, use encoding, or alias the commands (for example `iex` written with string tricks). The IEX match is a substring, so it can also match unrelated text; review the full command line.
 
+- Encoded commands (`-enc` or `-EncodedCommand`), string concatenation, backticks, or a payload staged in a script file hide the keywords from the process command line. PowerShell Script Block Logging (Event 4104) records the decoded script, and network or DNS telemetry shows the download itself, so both help close the gap.
+- `Invoke-Command` and the `.Invoke()` method are legitimate and common, so I did not add them as execution markers.
+
 ## Validation results
 _Not yet run._
 
 ## References
 - https://attack.mitre.org/techniques/T1059/001/
+- https://attack.mitre.org/techniques/T1105/

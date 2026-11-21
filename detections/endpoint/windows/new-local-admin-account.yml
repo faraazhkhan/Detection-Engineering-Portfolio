@@ -4,8 +4,10 @@ status: experimental
 description: Detects net.exe commands that create a local account or add one to the local Administrators group, a simple way for attackers to keep access to a host.
 references:
 - https://attack.mitre.org/techniques/T1136/001/
+- https://attack.mitre.org/techniques/T1098/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.persistence
 - attack.t1136.001
@@ -16,19 +18,27 @@ logsource:
   product: windows
 detection:
   selection_img:
-    Image|endswith:
+  - Image|endswith:
     - \net.exe
     - \net1.exe
+  - OriginalFileName:
+    - net.exe
+    - net1.exe
   selection_group:
     CommandLine|contains|all:
     - localgroup
-    - administrators
     - /add
+  selection_admin_name:
+    CommandLine|contains:
+    - administrators
+    - administrateurs
+    - administratoren
+    - administradores
   selection_user:
     CommandLine|contains|all:
     - ' user '
     - /add
-  condition: selection_img and (selection_group or selection_user)
+  condition: selection_img and ((selection_group and selection_admin_name) or selection_user)
 falsepositives:
 - Help desk or imaging scripts that create local accounts.
 - Software installers that create service accounts.

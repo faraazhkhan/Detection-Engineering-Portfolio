@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1071/001/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.command-and-control
 - attack.t1071.001
@@ -17,8 +18,9 @@ detection:
     - curl/
     - Wget/
     - python-requests/
+    - python-urllib/
   selection_ps:
-    c-useragent|contains: WindowsPowerShell
+    c-useragent|contains: PowerShell/
   condition: 1 of selection_*
 falsepositives:
 - Build servers, developer machines, monitoring tools, and legitimate scripts that call web services.

@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1133/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.initial-access
 - attack.t1133
@@ -24,6 +25,14 @@ detection:
     - 10.0.0.0/8
     - 172.16.0.0/12
     - 192.168.0.0/16
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+    - 100.64.0.0/10
+    - 224.0.0.0/4
+    - 240.0.0.0/4
+    - fc00::/7
+    - fe80::/10
+    - ::1/128
   condition: selection and not filter_internal
 falsepositives:
 - Intentionally published services, such as a bastion host or a VPN gateway that listens on SSH.

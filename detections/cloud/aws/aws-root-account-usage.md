@@ -27,8 +27,16 @@ Once validated, record the date, the tool used, and a sample of the matching eve
 
 Keep the allow-list small. Document any approved root tasks, require MFA on root, and alert at high priority for every other use.
 
+### What to check on a hit
+- `sourceIPAddress` and `userAgent`: an interactive console login, the CLI, or an SDK from an unfamiliar network.
+- `userIdentity.invokedBy`: shows when AWS itself or another service acted on the root account's behalf, which helps separate a person from automation.
+- `eventName`: a root console login (`ConsoleLogin`) is different from root creating access keys or changing MFA, and the second is much more worrying.
+- Whether the root account has MFA on and no access keys. Neither should be needed for daily work.
+
 ## Limitations
 CloudTrail must be enabled in all regions and delivered to a protected account, or root activity in a missed region goes unseen.
+
+Field names depend on your SIEM. `userIdentity.type` and `eventType` are nested in raw CloudTrail JSON, and some pipelines flatten them with a different separator. Map them to your product before relying on the rule. The `AwsServiceEvent` exclusion removes events AWS generates itself under the account, which is normally what you want, but check that your SIEM exposes `eventType` before relying on it.
 
 ## Validation results
 _Not yet run._

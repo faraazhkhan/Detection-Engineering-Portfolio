@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1059/004/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.execution
 - attack.t1059.004
@@ -18,7 +19,9 @@ detection:
     - /bash
     - /sh
   selection_cli:
-    CommandLine|contains: /dev/tcp/
+    CommandLine|contains:
+    - /dev/tcp/
+    - /dev/udp/
   condition: selection_img and selection_cli
 falsepositives:
 - Rare. Admin or monitoring scripts that use /dev/tcp to test whether a port is open.

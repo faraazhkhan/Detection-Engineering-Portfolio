@@ -14,7 +14,10 @@
 Detects certutil.exe being used to fetch a file from a web address, a living-off-the-land way to download payloads using a trusted Windows tool.
 
 ## Detection logic
-certutil.exe (or a renamed copy, caught by OriginalFileName) with `urlcache` and an `http` address in the command line.
+certutil.exe (or a renamed copy, caught by `OriginalFileName`) with one of:
+- `urlcache` and an `http` address (the classic `certutil -urlcache -split -f http://...`; `http` also matches `https`).
+- `verifyctl` and an `http` address, a less well-known way to make certutil fetch a file.
+- `urlcache` and an `ftp://` address.
 
 ## How to test
 In an isolated Windows VM, run `certutil -urlcache -f http://127.0.0.1/test.txt out.txt` against a local web server. Atomic Red Team has certutil download tests under T1105.
@@ -27,7 +30,9 @@ Once validated, record the date, the tool used, and a sample of the matching eve
 Few legitimate uses exist. Allow-list known certificate tooling if it fires, and check what file was written and where.
 
 ## Limitations
-Newer certutil options (such as `-verifyctl`) can also download files and are not covered here. Other tools (bitsadmin, curl) do the same job and need their own rules.
+- Command-line obfuscation can defeat literal matching: quotes or carets inserted inside the option name, extra spacing, or environment-variable expansion.
+- This rule sees the download attempt only. Whatever happens to the file afterwards (it is saved, run, or loaded) needs file-creation, process and network events correlated with it.
+- Other tools do the same job (bitsadmin, curl, PowerShell) and need their own coverage.
 
 ## Validation results
 _Not yet run._

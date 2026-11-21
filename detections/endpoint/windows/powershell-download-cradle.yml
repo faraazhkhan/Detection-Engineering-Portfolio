@@ -3,9 +3,11 @@ id: 3f6c1a52-9d1e-4b7a-8c21-5a0e7d4b1108
 status: experimental
 description: Detects PowerShell command lines that download content from the web and run it directly, a very common way attackers fetch and execute payloads without saving a file first.
 references:
+- https://attack.mitre.org/techniques/T1105/
 - https://attack.mitre.org/techniques/T1059/001/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.execution
 - attack.t1059.001
@@ -16,19 +18,26 @@ logsource:
   product: windows
 detection:
   selection_img:
-    Image|endswith:
+  - Image|endswith:
     - \powershell.exe
     - \pwsh.exe
+  - OriginalFileName:
+    - PowerShell.EXE
+    - pwsh.dll
   selection_download:
     CommandLine|contains:
     - DownloadString
     - Net.WebClient
     - Invoke-WebRequest
     - Invoke-RestMethod
+    - DownloadData
+    - DownloadFile
+    - Start-BitsTransfer
   selection_exec:
     CommandLine|contains:
     - IEX
     - Invoke-Expression
+    - 'ScriptBlock]::Create'
   condition: selection_img and selection_download and selection_exec
 falsepositives:
 - Admin or installer scripts that download and run a script from an internal or vendor URL (for example some package-manager install one-liners).

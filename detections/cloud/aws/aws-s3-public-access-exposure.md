@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **MITRE ATT&CK** | T1530 (approximate) |
+| **MITRE ATT&CK** | T1530 |
 | **Tactic** | Collection |
 | **Severity** | High |
 | **Log source** | AWS CloudTrail management events (S3 bucket-level APIs) |
@@ -14,7 +14,9 @@
 Detects changes that can expose an S3 bucket to the internet: deleting the public access block, or setting a bucket ACL that grants access to all users.
 
 ## Detection logic
-S3 DeleteBucketPublicAccessBlock calls, or PutBucketAcl calls whose parameters grant access to AllUsers.
+Either of:
+- An S3 `DeleteBucketPublicAccessBlock` call, which removes a bucket's protection against public access.
+- An S3 `PutBucketAcl` call whose parameters grant access to `AllUsers` (anyone on the internet) or `AuthenticatedUsers` (any AWS account holder, which is almost as open because anyone can create an AWS account).
 
 ## How to test
 In a personal sandbox AWS account, create a test bucket and run `aws s3api delete-public-access-block --bucket <name>`. Delete the bucket afterwards. Do not use real data.
@@ -29,6 +31,11 @@ Maintain a list of buckets that are intentionally public and suppress them. Trea
 
 ## Limitations
 Bucket policies with a wildcard principal are not covered by this rule. ATT&CK has no exact technique for exposure, so T1530 is an approximate mapping. Account-level S3 Block Public Access settings are a better preventive control.
+
+Other ways to expose a bucket are not covered, and the write-up is clear about that boundary:
+- `PutBucketPolicy` with a wildcard principal (`"Principal": "*"`).
+- Weakening block settings with `PutBucketPublicAccessBlock` or the account-level `PutPublicAccessBlock` (turning `BlockPublicAcls` or `RestrictPublicBuckets` off), or removing the account-level block.
+These depend on matching nested policy or configuration JSON, which varies by SIEM, so they fit better in separate rules once you know how your pipeline stores that text.
 
 ## Validation results
 _Not yet run._

@@ -6,6 +6,7 @@ references:
 - https://attack.mitre.org/techniques/T1530/
 author: Faraaz Khan
 date: '2026-11-20'
+modified: '2026-11-21'
 tags:
 - attack.collection
 - attack.t1530
@@ -19,7 +20,9 @@ detection:
   selection_acl:
     eventSource: s3.amazonaws.com
     eventName: PutBucketAcl
-    requestParameters|contains: AllUsers
+    requestParameters|contains:
+    - AllUsers
+    - AuthenticatedUsers
   condition: 1 of selection_*
 falsepositives:
 - Buckets that intentionally host public content, such as a static website.
