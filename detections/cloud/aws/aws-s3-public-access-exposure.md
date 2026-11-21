@@ -1,4 +1,4 @@
-# AWS S3 Public Access Block Removed or Bucket ACL Opened to Everyone
+# AWS S3 Public Access Block Removed or Bucket ACL Opened to Everyone or Any AWS Account
 
 | | |
 |---|---|

@@ -6,7 +6,7 @@
 | **Tactic** | Initial Access / Persistence |
 | **Severity** | High |
 | **Log source** | AWS CloudTrail management events |
-| **Required fields** | userIdentity.type, eventName, sourceIPAddress, userAgent, eventSource |
+| **Required fields** | userIdentity.type, eventName, sourceIPAddress, userAgent, eventSource, eventType |
 | **Rule file** | [`aws-root-account-usage.yml`](./aws-root-account-usage.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 

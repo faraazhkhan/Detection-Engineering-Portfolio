@@ -6,7 +6,7 @@
 | **Tactic** | Lateral Movement |
 | **Severity** | Medium |
 | **Log source** | Windows System log, Service Control Manager event 7045 |
-| **Required fields** | Provider_Name, EventID, ImagePath |
+| **Required fields** | EventID, ServiceName, ImagePath |
 | **Rule file** | [`psexec-service-installed.yml`](./psexec-service-installed.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 

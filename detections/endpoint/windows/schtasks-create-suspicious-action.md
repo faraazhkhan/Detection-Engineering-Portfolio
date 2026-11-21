@@ -6,7 +6,7 @@
 | **Tactic** | Persistence |
 | **Severity** | Medium |
 | **Log source** | Windows process creation (Sysmon EID 1 or Security EID 4688 with command-line auditing) |
-| **Required fields** | Image, CommandLine |
+| **Required fields** | Image, CommandLine, OriginalFileName |
 | **Rule file** | [`schtasks-create-suspicious-action.yml`](./schtasks-create-suspicious-action.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 

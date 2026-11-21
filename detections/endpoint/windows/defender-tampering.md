@@ -6,7 +6,7 @@
 | **Tactic** | Defense Evasion |
 | **Severity** | High |
 | **Log source** | Windows process creation events with command-line logging |
-| **Required fields** | Image, CommandLine, ParentImage, User |
+| **Required fields** | Image, CommandLine, ParentImage, User, OriginalFileName |
 | **Rule file** | [`defender-tampering.yml`](./defender-tampering.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 
@@ -20,6 +20,7 @@ The process must be PowerShell (`powershell.exe`, `pwsh.exe` or the ISE, matched
 
 ### Design choices
 - Requiring a PowerShell process means a text editor, a log viewer or an unrelated tool that happens to have these words in its command line won't fire the rule.
+- The exclusion branch requires `Add-MpPreference` or `Set-MpPreference`, not just `MpPreference`. `Get-MpPreference` only reads settings, so a command that lists the current exclusions does not fire it, and neither does `Remove-MpPreference`. Reading the exclusion list is still worth a look during hunting, since attackers check it before choosing where to drop files.
 - The rule can't tell `-DisableRealtimeMonitoring $true` (turning protection off) from `$false` (turning it back on), so a re-enable also matches. That is usually still worth a look, and it is a known noise source during testing.
 
 ## How to test

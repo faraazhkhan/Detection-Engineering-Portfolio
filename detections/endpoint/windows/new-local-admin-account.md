@@ -6,7 +6,7 @@
 | **Tactic** | Persistence |
 | **Severity** | Medium |
 | **Log source** | Windows process creation events with command-line logging |
-| **Required fields** | Image, CommandLine, ParentImage, User |
+| **Required fields** | Image, CommandLine, ParentImage, User, OriginalFileName |
 | **Rule file** | [`new-local-admin-account.yml`](./new-local-admin-account.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 

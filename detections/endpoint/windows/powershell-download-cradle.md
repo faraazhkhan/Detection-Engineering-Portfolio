@@ -6,7 +6,7 @@
 | **Tactic** | Execution |
 | **Severity** | High |
 | **Log source** | Windows process creation events with command-line logging (EDR, Sysmon Event ID 1, or Security Event 4688) |
-| **Required fields** | Image, CommandLine, ParentImage, User |
+| **Required fields** | Image, CommandLine, ParentImage, User, OriginalFileName |
 | **Rule file** | [`powershell-download-cradle.yml`](./powershell-download-cradle.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 

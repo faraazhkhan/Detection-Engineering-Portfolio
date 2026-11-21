@@ -33,11 +33,13 @@ detection:
     - DisableScriptScanning
     - DisableIntrusionPreventionSystem
     - DisableBlockAtFirstSeen
+  selection_exclusion_cmd:
+    CommandLine|contains:
+    - Add-MpPreference
+    - Set-MpPreference
   selection_exclusion:
-    CommandLine|contains|all:
-    - MpPreference
-    - Exclusion
-  condition: selection_ps and ((selection_set and selection_disable_param) or selection_exclusion)
+    CommandLine|contains: Exclusion
+  condition: selection_ps and ((selection_set and selection_disable_param) or (selection_exclusion_cmd and selection_exclusion))
 falsepositives:
 - IT or security teams adding exclusions for approved software.
 - Software installers that add their own Defender exclusions.

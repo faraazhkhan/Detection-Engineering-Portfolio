@@ -6,7 +6,7 @@
 | **Tactic** | Defense Evasion |
 | **Severity** | High |
 | **Log source** | Windows process creation (Sysmon EID 1 or Security EID 4688 with command-line auditing) |
-| **Required fields** | Image, CommandLine |
+| **Required fields** | Image, CommandLine, OriginalFileName |
 | **Rule file** | [`windows-event-log-cleared.yml`](./windows-event-log-cleared.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 
@@ -15,7 +15,7 @@ Detects attempts to clear Windows event logs using wevtutil or the Clear-EventLo
 
 ## Detection logic
 Two branches:
-1. `wevtutil.exe` (or a renamed copy, caught via OriginalFileName) with a verb starting ` cl`. That covers both `cl` and `clear-log`, and `/cl` or `-cl` forms are included defensively. No other wevtutil verb starts with `cl`, so the short match is safe.
+1. `wevtutil.exe` (or a renamed copy, caught via OriginalFileName) with a verb starting ` cl`. That covers both `cl` and `clear-log`, and `/cl` or `-cl` forms are included defensively. No other wevtutil verb starts with `cl`, so the short match is safe. A log name that itself begins with "cl" (for example a cluster log) could also match a query command, which is rare.
 2. A PowerShell process (`powershell.exe` or `pwsh.exe`) whose command line contains `Clear-EventLog` or the .NET `ClearLog(` method (for example `[...EventLogSession]::GlobalSession.ClearLog(...)` or `$_.ClearLog()` on a log object).
 
 ### Design choices

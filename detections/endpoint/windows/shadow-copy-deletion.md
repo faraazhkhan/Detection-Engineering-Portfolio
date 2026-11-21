@@ -6,7 +6,7 @@
 | **Tactic** | Impact |
 | **Severity** | High |
 | **Log source** | Windows process creation events (Sysmon Event ID 1 or Security Event ID 4688 with command-line logging) |
-| **Required fields** | Image, CommandLine, ParentImage, User |
+| **Required fields** | Image, CommandLine, ParentImage, User, OriginalFileName |
 | **Rule file** | [`shadow-copy-deletion.yml`](./shadow-copy-deletion.yml) |
 | **Status** | Draft. Not yet validated in a lab. |
 
